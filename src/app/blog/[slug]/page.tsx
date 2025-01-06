@@ -2,13 +2,64 @@ import { client } from '@/sanity/lib/client';
 import { urlFor } from '@/sanity/lib/image';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
-import CommentSection from '@/components/CommentSection';
+import { Metadata } from 'next';
+
 
 interface Category {
   title: string;
 }
+interface Params {
+  slug: string;
+}
+interface BlogPost {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  mainImage: string;
+  content: [];
+  author: { name: string; profession: string; image: string };
+  categories: { title: string }[];
+  publishedAt: string;
+}
 
-export default async function BlogPostPage({ params : { slug } }:{ params: { slug: string } }) {
+
+async function getAllBlogSlugs(): Promise<{ slug: string }[]> {
+  try {
+    const query = `*[_type == "blogPost"]{ slug }`;
+    const slugs = await client.fetch<{ slug: { current: string } }[]>(query);
+
+    if (!slugs || slugs.length === 0) {
+      console.warn("No blog posts found in Sanity!");
+      return [];
+    }
+    return slugs.map((slug) => ({ slug: slug.slug.current }));
+  } catch (error) {
+    console.error("Error fetching blog slugs:", error);
+    return [];
+  }
+}
+
+export async function generateStaticParams() {
+  return await getAllBlogSlugs(); // Directly return the Promise
+}
+
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { slug } = params;
+  const query = `*[_type == "blogPost" && slug.current == $slug][0]{ title }`;
+  try {
+    const post = await client.fetch<{ title: string }>(query, { slug });
+    return {
+      title: post?.title || `Blog Post: ${slug}`,
+    };
+  } catch (error) {
+    console.error("Error fetching metadata:", error);
+    return { title: `Blog Post: ${slug}` }; // Provide a default title to prevent build failure
+  }
+}
+
+export default async function BlogPostPage(
+  { params }: {params: Params}): Promise<JSX.Element> {
+  const { slug } = params;
   const query = `*[_type == "blogPost" && slug.current == $slug][0]{
     _id,
     title,
@@ -26,14 +77,11 @@ export default async function BlogPostPage({ params : { slug } }:{ params: { slu
     publishedAt
   }`;
 
-  const post = await client.fetch(query, { slug });
+  const post: BlogPost = await client.fetch(query, { slug });
 
-  const commentsQuery = `*[_type == "comment" && post._ref == $postId && approved == true]{
-    name,
-    comment
-  }`;
-
-  const comments = await client.fetch(commentsQuery, { postId: post._id });
+  if (!post) {
+    return <div className='text-center text-4xl font-bold'>Post not Found</div>
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -121,8 +169,8 @@ export default async function BlogPostPage({ params : { slug } }:{ params: { slu
         />
       </div>
 
-      {/* Comments Section */}
-      <CommentSection postId={post._id} initialComments={comments} />
+      
+
     </div>
   );
 }

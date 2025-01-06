@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import {Home, List, PenTool, PersonStandingIcon} from 'lucide-react'
 import { ModeToggle } from "@/components/ui/ModeToggle";
+import { RiMenuSearchLine } from "react-icons/ri";
+import { RxCross1 } from "react-icons/rx";
 
 
 export default function Navbar() {
@@ -41,7 +43,7 @@ export default function Navbar() {
       {/* Desktop Menu */}
       <div className="hidden md:flex w-full h-20 items-center justify-between border-b-2 relative px-10">
         <Link href={"/"}>
-          <Image src={"/next.svg"} alt="" width={80} height={80} />
+          <Image src={"/logo2.png"} alt="" width={120} height={80} />
         </Link>
 
         <ul className="text-lg font-normal flex gap-5 lg:gap-10">
@@ -76,19 +78,18 @@ export default function Navbar() {
       {/* Mobile menu */}
       <div className="md:hidden flex w-full h-20 items-center justify-around">
         <div className="flex items-center">
-          <Image src={"/next.svg"} alt="" width={50} height={50} />
+          <Image src={"/logo.png"} alt="" width={50} height={50} />
         </div>
 
         <button
           className="md:hidden flex items-center justify-center"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          <Image
-            src={isMobileMenuOpen ? "/cross-image.png" : "/menu-image.png"}
-            alt="menu"
-            width={24}
-            height={24}
-          />
+          {isMobileMenuOpen ? (
+            <RxCross1 className="text-black dark:text-white" />
+          ) : (
+            <RiMenuSearchLine className="text-black dark:text-white" />
+          )}
         </button>
       </div>
       <div

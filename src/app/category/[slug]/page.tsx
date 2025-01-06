@@ -85,7 +85,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
               {/* Blog Details */}
               <div className="p-4 flex-1">
                 <h2 className="text-lg font-semibold mb-2">{post.title}</h2>
-                <p className="text-sm text-gray-600 line-clamp-3">
+                <p className="text-sm text-gray-600 line-clamp-3 dark:text-gray-400">
                   {post.excerpt.substring(0, 60) || "No description available."}
                 </p>
                 <div className="flex items-center mt-4">
@@ -102,7 +102,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
                   )}
                   <div className="ml-2">
                     <p className="text-sm font-medium">{post.author?.name || "Unknown Author"}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-[#0ef]">
                       {post.author?.profession || "Unknown Profession"}
                     </p>
                   </div>

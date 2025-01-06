@@ -1,4 +1,4 @@
-export default {
+const comments = {
   name: 'comment',
   type: 'document',
   title: 'Comment',
@@ -14,3 +14,5 @@ export default {
     { name: 'approved', type: 'boolean', title: 'Approved', default: false },
   ],
 };
+
+export default comments;

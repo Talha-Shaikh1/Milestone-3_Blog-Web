@@ -26,7 +26,7 @@ export default async function CategoriesPage() {
           <Link
             key={category._id}
             href={`/category/${category.slug.current}`}
-            className="block p-4 border rounded-lg shadow-md hover:shadow-lg hover:text-white hover:bg-transparent bg-gray-50 transition-shadow duration-300 dark:bg-gray-500 dark:hover:bg-transparent"
+            className="block p-4 border rounded-lg shadow-md hover:shadow-lg dark:hover:text-white hover:bg-transparent bg-gray-50 transition-shadow duration-300 dark:bg-gray-500 dark:hover:bg-transparent"
           >
             <h2 className="text-lg font-semibold ">{category.name}</h2>
           </Link>
