@@ -1,5 +1,6 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
 
+
 const blog  = defineType({
     name: 'blogPost',
     title: 'Blog Post',

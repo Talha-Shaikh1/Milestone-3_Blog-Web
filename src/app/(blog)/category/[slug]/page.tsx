@@ -22,7 +22,12 @@ interface Post {
   }
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
+export default async function page({params,
+
+}: {
+   params: Promise<{ slug: string }> ;
+  }) {
+    const { slug } = await params;
   
   const query = `*[_type == "blogPost" && $slug in categories[]->slug.current]{
     _id,
@@ -41,11 +46,11 @@ export default async function CategoryPage({ params }: { params: { slug: string 
     }
   }`;
 
-  const posts = await client.fetch(query, { slug: params.slug });
+  const posts = await client.fetch(query, { slug });
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-6">Blogs in {params.slug}</h1>
+      <h1 className="text-2xl font-bold mb-6">Blogs in {(await params).slug}</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.map((post: Post) => (
           <Link href={`/blog/${post.slug.current}`} key={post._id}>
