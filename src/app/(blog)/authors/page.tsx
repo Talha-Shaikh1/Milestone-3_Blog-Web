@@ -11,7 +11,7 @@ interface Author {
     bio: string
   }
 
-export default async function Authors() {
+export default async function page() {
 
     const query = `*[_type == "author"]{
         _id,

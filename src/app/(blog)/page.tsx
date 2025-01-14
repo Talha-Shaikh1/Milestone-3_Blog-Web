@@ -116,3 +116,4 @@ const BlogPage = async () => {
 };
 
 export default BlogPage;
+console.log('Sanity Dataset:', process.env.NEXT_PUBLIC_SANITY_DATASET);

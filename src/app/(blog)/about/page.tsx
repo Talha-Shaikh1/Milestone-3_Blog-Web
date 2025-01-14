@@ -10,7 +10,10 @@ interface Author {
   profession: string
 }
 
-export default async function AboutPage(){
+export default async function page(){
+
+  console.log('Sanity Dataset:', process.env.NEXT_PUBLIC_SANITY_DATASET);
+
 
   const query = `*[_type == "author"]{
   _id,
